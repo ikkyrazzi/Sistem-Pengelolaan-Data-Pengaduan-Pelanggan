@@ -8,13 +8,16 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Exports\ComplaintsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ComplaintController extends Controller
 {
     public function index()
     {
-        $complaints = Complaint::with(['customer', 'assignedTechnician'])
-            ->orderBy('created_at', 'desc')
+        $complaints = Complaint::with(['assignedTechnician'])
+            ->where('status', 'completed')
+            ->whereNotNull('assigned_technician_id')
             ->get();
 
         return view('pages.admin.complaint.index', compact('complaints'));
@@ -112,20 +115,30 @@ class ComplaintController extends Controller
             'schedule' => $schedule,
         ]);
 
-        return redirect()->route('admin.complaint.index')->with('success', 'Technician assigned successfully');
+        return redirect()->route('admin.complaint.schedule-index')->with('success', 'Technician assigned successfully');
     }
 
 
     public function scheduleIndex()
     {
-        $complaints = Complaint::with(['assignedTechnician'])->whereNotNull('assigned_technician_id')->get();
+        $complaints = Complaint::with(['customer', 'assignedTechnician'])
+            ->whereIn('status', ['in_progress', 'pending'])
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        return view('pages.admin.complaint.schedule-index', compact('complaints'));
+        $customers = User::role('customer')->get();
+
+        return view('pages.admin.complaint.schedule-index', compact('complaints', 'customers'));
     }
 
     public function destroy(Complaint $complaint)
     {
         $complaint->delete();
         return redirect()->route('admin.complaint.index')->with('success', 'Complaint deleted successfully');
+    }
+
+    public function export()
+    {
+        return Excel::download(new ComplaintsExport, 'complaints.xlsx');
     }
 }

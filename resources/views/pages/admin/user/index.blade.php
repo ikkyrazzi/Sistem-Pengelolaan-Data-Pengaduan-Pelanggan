@@ -27,9 +27,9 @@
                     <div class="card-header">
                         <div class="d-flex align-items-center">
                             <h4 class="card-title">List Data</h4>
-                            <a href="{{ route('admin.user.create') }}" class="btn btn-primary btn-round ms-auto">
+                            {{-- <a href="{{ route('admin.user.create') }}" class="btn btn-primary btn-round ms-auto">
                                 <i class="fa fa-plus"></i> Create New User
-                            </a>
+                            </a> --}}
                         </div>
                     </div>
                     <div class="card-body">
@@ -66,15 +66,15 @@
                                                     class="btn btn-info btn-sm">
                                                     <i class="fa fa-eye"></i> Details Profile
                                                 </a>
-                                                <a href="{{ route('admin.user.edit', $user->id) }}"
+                                                {{-- <a href="{{ route('admin.user.edit', $user->id) }}"
                                                     class="btn btn-warning btn-sm">
                                                     <i class="fa fa-edit"></i> Edit
-                                                </a>
+                                                </a> --}}
                                                 <a href="{{ route('admin.user.change-password-form', $user->id) }}"
                                                     class="btn btn-primary btn-sm">
                                                     <i class="fa fa-key"></i> Change Password
                                                 </a>
-                                                @if ($user->hasRole('Technician'))
+                                                {{-- @if ($user->hasRole('Technician'))
                                                     <a href="{{ route('admin.user.create-technician', $user->id) }}"
                                                         class="btn btn-secondary btn-sm">
                                                         <i class="fa fa-user"></i> Profile Technician
@@ -84,7 +84,7 @@
                                                         class="btn btn-secondary btn-sm">
                                                         <i class="fa fa-user"></i> Profile Customer
                                                     </a>
-                                                @endif
+                                                @endif --}}
                                                 <button type="button" class="btn btn-danger btn-sm"
                                                     onclick="confirmDelete('{{ route('admin.user.destroy', $user->id) }}')">
                                                     <i class="fa fa-trash"></i> Delete

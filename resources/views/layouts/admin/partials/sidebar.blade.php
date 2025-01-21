@@ -40,19 +40,19 @@
                     <h4 class="text-section">Pages</h4>
                 </li>
 
-                <!-- Menu Complaints -->
-                <li class="nav-item {{ request()->routeIs('admin.complaint.index') ? 'active' : '' }}">
-                    <a href="{{ route('admin.complaint.index') }}">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <p>Complaints</p>
-                    </a>
-                </li>
-
                 <!-- Menu Schedule Technician -->
                 <li class="nav-item {{ request()->routeIs('admin.complaint.schedule-index') ? 'active' : '' }}">
                     <a href="{{ route('admin.complaint.schedule-index') }}">
                         <i class="fas fa-calendar-check"></i>
                         <p>Schedule Technician</p>
+                    </a>
+                </li>
+
+                <!-- Menu Complaints -->
+                <li class="nav-item {{ request()->routeIs('admin.complaint.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.complaint.index') }}">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>Complaints</p>
                     </a>
                 </li>
 

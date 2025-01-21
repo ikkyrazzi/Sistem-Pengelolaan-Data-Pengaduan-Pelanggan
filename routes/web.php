@@ -114,6 +114,8 @@ Route::middleware('auth')->group(function () {
         Route::get('admin/complaint/schedule/{complaint}', [ComplaintController::class, 'schedule'])->name('admin.complaint.schedule');
         Route::post('admin/complaint/schedule/{complaint}', [ComplaintController::class, 'scheduleUpdate'])->name('admin.complaint.schedule.update');
         Route::get('admin/complaints/schedule', [ComplaintController::class, 'scheduleIndex'])->name('admin.complaint.schedule-index');
+
+        Route::get('admin/complaints/export', [ComplaintController::class, 'export'])->name('admin.complaint.export');
     });
 
     // Rute untuk Technician

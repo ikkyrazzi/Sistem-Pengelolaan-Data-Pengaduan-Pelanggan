@@ -79,7 +79,7 @@
                                 <th>Status</th>
                                 <td>
                                     <span
-                                        class="badge badge-{{ $complaint->status == 'completed' ? 'success' : ($complaint->status == 'pending' ? 'secondary' : 'warning') }} rounded-pill">
+                                        class="badge badge-{{ $complaint->status == 'completed' ? 'success' : ($complaint->status == 'pending' ? 'warning' : 'info') }}">
                                         {{ ucfirst($complaint->status) }}
                                     </span>
                                 </td>
@@ -95,7 +95,7 @@
                                 </tr>
                             @endif
                         </table>
-                        <a href="{{ route('admin.complaint.index') }}" class="btn btn-secondary">Back to List</a>
+                        <a href="{{ route('admin.complaint.schedule-index') }}" class="btn btn-secondary">Back to List</a>
                     </div>
                 </div>
             </div>

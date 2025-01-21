@@ -256,8 +256,6 @@
                 }
             </script>
 
-
-
             <div class="col-md-4">
                 <!-- Recent Complaints Card -->
                 <div class="card card-primary card-round">

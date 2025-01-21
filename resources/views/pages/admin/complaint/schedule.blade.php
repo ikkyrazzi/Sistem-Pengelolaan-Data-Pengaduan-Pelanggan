@@ -48,10 +48,10 @@
                             <div class="form-group">
                                 <label for="schedule">Schedule</label>
                                 <input type="date" name="schedule" id="schedule" class="form-control"
-                                    value="{{ $complaint->schedule ? $complaint->schedule->format('Y-m-d') : '' }}">
+                                    value="{{ $complaint->schedule }}">
                             </div>
                             <button type="submit" class="btn btn-success">Assign Technician</button>
-                            <a href="{{ route('admin.complaint.index') }}" class="btn btn-secondary">Cancel</a>
+                            <a href="{{ route('admin.complaint.schedule-index') }}" class="btn btn-secondary">Cancel</a>
                         </form>
                     </div>
                 </div>

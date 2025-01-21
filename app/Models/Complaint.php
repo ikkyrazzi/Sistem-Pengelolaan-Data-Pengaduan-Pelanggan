@@ -45,4 +45,9 @@ class Complaint extends Model
     {
         return $this->belongsTo(Technician::class);
     }
+
+    public function cus()
+    {
+        return $this->belongsTo(Customer::class);
+    }
 }

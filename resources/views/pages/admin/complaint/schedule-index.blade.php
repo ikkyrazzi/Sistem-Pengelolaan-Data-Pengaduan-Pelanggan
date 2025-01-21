@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 
-@section('title', 'Technician Schedules')
+@section('title', 'Manage Complaints')
 
 @section('content')
     <div class="page-inner">
@@ -38,10 +38,13 @@
                                 <thead>
                                     <tr>
                                         <th>NO</th>
-                                        <th>Complaint Subject</th>
-                                        <th>Assigned Technician</th>
+                                        <th>Customer</th>
+                                        <th>Subject</th>
+                                        <th>Category</th>
+                                        <th>Priority</th>
                                         <th>Status</th>
-                                        <th>Schedule</th>
+                                        <th>Assigned Technician</th>
+                                        <th>Created At</th>
                                         <th class="text-center">Actions</th>
                                     </tr>
                                 </thead>
@@ -49,13 +52,29 @@
                                     @forelse ($complaints as $complaint)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $complaint->customer->name }}</td>
                                             <td>{{ $complaint->subject }}</td>
+                                            <td>{{ $complaint->category }}</td>
                                             <td>
-                                                @if ($complaint->assignedTechnician)
-                                                    {{ $complaint->assignedTechnician->name }}
-                                                @else
-                                                    -
-                                                @endif
+                                                @php
+                                                    $priorityClass = '';
+                                                    switch (strtolower($complaint->priority)) {
+                                                        case 'high':
+                                                            $priorityClass = 'badge badge-danger';
+                                                            break;
+                                                        case 'medium':
+                                                            $priorityClass = 'badge badge-warning';
+                                                            break;
+                                                        case 'low':
+                                                            $priorityClass = 'badge badge-success';
+                                                            break;
+                                                        default:
+                                                            $priorityClass = 'badge badge-secondary';
+                                                            break;
+                                                    }
+                                                @endphp
+                                                <span
+                                                    class="{{ $priorityClass }} rounded-pill">{{ ucfirst($complaint->priority) }}</span>
                                             </td>
                                             <td>
                                                 <span
@@ -64,21 +83,28 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                @if ($complaint->schedule)
-                                                    {{ \Carbon\Carbon::parse($complaint->schedule)->format('d M Y') }}
+                                                @if ($complaint->assignedTechnician)
+                                                    {{ $complaint->assignedTechnician->name }}
                                                 @else
-                                                    Not Scheduled
+                                                    -
                                                 @endif
                                             </td>
+                                            <td>
+                                                {{ $complaint->created_at->format('Y-m-d H:i') }}
+                                            </td>
                                             <td class="text-center">
-                                                {{-- <a href="{{ route('admin.complaint.show', $complaint->id) }}"
+                                                <a href="{{ route('admin.complaint.show', $complaint->id) }}"
                                                     class="btn btn-info btn-sm">
                                                     <i class="fa fa-eye"></i> View
                                                 </a>
+                                                {{-- <a href="{{ route('admin.complaint.edit', $complaint->id) }}"
+                                                    class="btn btn-warning btn-sm">
+                                                    <i class="fa fa-edit"></i> Edit
+                                                </a> --}}
                                                 <a href="{{ route('admin.complaint.schedule', $complaint->id) }}"
                                                     class="btn btn-primary btn-sm">
                                                     <i class="fa fa-calendar"></i> Schedule
-                                                </a> --}}
+                                                </a>
                                                 <button type="button" class="btn btn-danger btn-sm"
                                                     onclick="confirmDelete('{{ route('admin.complaint.destroy', $complaint->id) }}')">
                                                     <i class="fa fa-trash"></i> Delete
@@ -87,7 +113,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="6" class="text-center">No technician schedules available.</td>
+                                            <td colspan="9" class="text-center">No complaints available.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -111,7 +137,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this technician schedule? This action cannot be undone.
+                    Are you sure you want to delete this complaint? This action cannot be undone.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -124,4 +150,14 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#basic-datatables').DataTable({
+                "order": [
+                    [7, "desc"]
+                ]
+            });
+        });
+    </script>
 @endsection
