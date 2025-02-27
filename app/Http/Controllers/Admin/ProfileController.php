@@ -14,7 +14,7 @@ class ProfileController extends Controller
 {
     public function edit(Request $request): View
     {
-        return view('pages.admin.profile.edit', [
+        return view('pages.admin_baru.profile.edit', [
             'user' => $request->user(),
         ]);
     }

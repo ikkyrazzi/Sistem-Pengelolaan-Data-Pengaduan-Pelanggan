@@ -16,7 +16,7 @@ use App\Http\Controllers\Technician\ProfileController as TechnicianProfileContro
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::get('/dashboard', function () {
@@ -99,6 +99,8 @@ Route::middleware('auth')->group(function () {
         // Route untuk Create Technician
         Route::get('pages/admin/user/{user}/create-technician', [UserController::class, 'createTechnician'])->name('admin.user.create-technician');
         Route::post('pages/admin/user/{user}/store-technician', [UserController::class, 'storeTechnician'])->name('admin.user.store-technician');
+
+        Route::get('admin/send-today-schedule', [ComplaintController::class, 'sendTodaySchedule'])->name('admin.send-today-schedule');
 
         Route::resource('pages/admin/complaint', ComplaintController::class)
             ->names([

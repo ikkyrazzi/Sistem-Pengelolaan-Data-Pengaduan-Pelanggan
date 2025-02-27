@@ -33,7 +33,7 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('pages.customer.dashboard', compact(
+        return view('pages.customer_baru.dashboard', compact(
             'resolvedComplaints',
             'pendingComplaints',
             'inProgressComplaints',

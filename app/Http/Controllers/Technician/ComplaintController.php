@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Technician;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Complaint;
+use App\Mail\ComplaintStatusUpdated;
+use Illuminate\Support\Facades\Mail;
 
 class ComplaintController extends Controller
 {
@@ -18,7 +20,7 @@ class ComplaintController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return view('pages.technician.complaint', compact('complaints'));
+        return view('pages.technician_baru.complaint', compact('complaints'));
     }
 
     /**
@@ -31,14 +33,14 @@ class ComplaintController extends Controller
             ->orderBy('schedule', 'asc')
             ->get();
 
-        return view('pages.technician.schedule', compact('scheduledComplaints'));
+        return view('pages.technician_baru.schedule', compact('scheduledComplaints'));
     }
 
     public function show(Complaint $complaint)
     {
         $customer = $complaint->customer;
 
-        return view('pages.technician.complaint_show', compact('complaint', 'customer'));
+        return view('pages.technician_baru.complaint_show', compact('complaint', 'customer'));
     }
 
     /**
@@ -51,12 +53,13 @@ class ComplaintController extends Controller
             ->orderBy('updated_at', 'desc')
             ->paginate(10);
 
-        return view('pages.technician.history', compact('completedComplaints'));
+        return view('pages.technician_baru.history', compact('completedComplaints'));
     }
 
     /**
      * Update the status of a complaint.
      */
+
     public function updateStatus(Request $request, $id)
     {
         $complaint = Complaint::where('id', $id)
@@ -66,6 +69,9 @@ class ComplaintController extends Controller
         $complaint->status = $request->status;
         $complaint->save();
 
-        return redirect()->back()->with('success', 'Status keluhan berhasil diperbarui.');
+        // Kirim email ke customer
+        Mail::to($complaint->customer->email)->send(new ComplaintStatusUpdated($complaint));
+
+        return redirect()->back()->with('success', 'Status keluhan berhasil diperbarui dan email terkirim.');
     }
 }

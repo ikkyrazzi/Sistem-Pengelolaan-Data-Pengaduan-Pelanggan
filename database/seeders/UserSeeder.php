@@ -21,20 +21,20 @@ class UserSeeder extends Seeder
         ]);
         $admin->assignRole('Admin');
 
-        // Buat Customer
-        $customer = User::create([
-            'name' => 'Customer',
-            'email' => 'customer@gmail.com',
-            'password' => bcrypt('123123'),
-        ]);
-        $customer->assignRole('Customer');
+        // // Buat Customer
+        // $customer = User::create([
+        //     'name' => 'Customer',
+        //     'email' => 'customer@gmail.com',
+        //     'password' => bcrypt('123123'),
+        // ]);
+        // $customer->assignRole('Customer');
 
-        // Buat Technician
-        $technician = User::create([
-            'name' => 'Technician',
-            'email' => 'technician@gmail.com',
-            'password' => bcrypt('123123'),
-        ]);
-        $technician->assignRole('Technician');
+        // // Buat Technician
+        // $technician = User::create([
+        //     'name' => 'Technician',
+        //     'email' => 'technician@gmail.com',
+        //     'password' => bcrypt('123123'),
+        // ]);
+        // $technician->assignRole('Technician');
     }
 }

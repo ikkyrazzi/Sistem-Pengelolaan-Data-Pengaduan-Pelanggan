@@ -17,31 +17,23 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        // Get counts for users, technicians, complaints, and customers
+        $currentYear = Carbon::now()->year;
+
         $usersCount = User::count();
         $techniciansCount = Technician::count();
-        $complaintsCount = Complaint::count();
+        $complaintsCount = Complaint::whereDate('created_at', Carbon::today())->count();
         $customersCount = Customer::count();
 
-        // Get recent complaints (for example, the last 5)
-        $recentComplaints = Complaint::latest()->take(5)->get();
+        $recentComplaints = Complaint::with('customer.customerDetail')->latest()->take(5)->get();
 
-        // Complaints per month
-        $complaintsPerMonth = Complaint::selectRaw('YEAR(created_at) as year, MONTH(created_at) as month, COUNT(*) as total')
-            ->groupBy('year', 'month')
-            ->orderBy('year', 'asc')
-            ->orderBy('month', 'asc')
-            ->get();
-
-        // Complaints per category (Gangguan, Instalasi, Tagihan)
-        $categories = ['Gangguan', 'Instalasi', 'Tagihan', 'Lainnya'];
+        $categories = ['Gangguan Jaringan', 'Perangkat Rusak', 'Administrasi', 'Layanan TV', 'Gangguan Telepon', 'Lainnya'];
         $complaintsByCategory = [];
 
         foreach ($categories as $category) {
             $monthlyCounts = [];
-            // Get complaints count for each category by month
             for ($month = 1; $month <= 12; $month++) {
                 $monthlyCounts[] = Complaint::where('category', $category)
+                    ->whereYear('created_at', $currentYear)
                     ->whereMonth('created_at', $month)
                     ->count();
             }
@@ -51,15 +43,14 @@ class DashboardController extends Controller
             ];
         }
 
-        // Pass the data to the view
-        return view('pages.admin.dashboard', [
+        return view('pages.admin_baru.dashboard', [
             'usersCount' => $usersCount,
             'techniciansCount' => $techniciansCount,
             'complaintsCount' => $complaintsCount,
             'customersCount' => $customersCount,
             'recentComplaints' => $recentComplaints,
-            'complaintsPerMonth' => $complaintsPerMonth,
-            'complaintsByCategory' => $complaintsByCategory, // Pass category data to view
+            'complaintsByCategory' => $complaintsByCategory,
+            'currentYear' => $currentYear,
         ]);
     }
 }

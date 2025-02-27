@@ -14,12 +14,12 @@ class TechnicianController extends Controller
     public function index()
     {
         $technicians = Technician::all();
-        return view('pages.admin.technician.index', compact('technicians'));
+        return view('pages.admin_baru.technician.index', compact('technicians'));
     }
 
     public function create()
     {
-        return view('pages.admin.technician.create');
+        return view('pages.admin_baru.technician.create');
     }
 
     public function store(Request $request)
@@ -52,12 +52,12 @@ class TechnicianController extends Controller
 
     public function show(Technician $technician)
     {
-        return view('pages.admin.technician.show', compact('technician'));
+        return view('pages.admin_baru.technician.show', compact('technician'));
     }
 
     public function edit(Technician $technician)
     {
-        return view('pages.admin.technician.edit', compact('technician'));
+        return view('pages.admin_baru.technician.edit', compact('technician'));
     }
 
     public function update(Request $request, Technician $technician)
@@ -90,7 +90,7 @@ class TechnicianController extends Controller
     public function editPassword($id)
     {
         $technician = Technician::findOrFail($id);
-        return view('pages.admin.technician.change-password', compact('technician'));
+        return view('pages.admin_baru.technician.change-password', compact('technician'));
     }
 
     public function updatePassword(Request $request, $id)

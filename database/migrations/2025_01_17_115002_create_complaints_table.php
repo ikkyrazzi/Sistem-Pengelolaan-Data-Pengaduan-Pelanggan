@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('subject');
             $table->text('description');
             $table->string('category');
-            $table->enum('priority', ['low', 'medium', 'high']);
+            $table->enum('priority', ['low', 'medium', 'high', 'urgent']);
             $table->enum('status', ['in_progress', 'pending', 'completed']);
             $table->foreignId('assigned_technician_id')->nullable()->constrained('users');
             $table->date('schedule')->nullable();

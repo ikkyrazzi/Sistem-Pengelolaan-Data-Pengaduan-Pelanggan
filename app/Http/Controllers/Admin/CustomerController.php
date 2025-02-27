@@ -14,13 +14,13 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = Customer::all();
-        return view('pages.admin.customer.index', compact('customers'));
+        return view('pages.admin_baru.customer.index', compact('customers'));
     }
 
     public function create()
     {
         $roles = Role::all();
-        return view('pages.admin.customer.create', compact('roles'));
+        return view('pages.admin_baru.customer.create', compact('roles'));
     }
 
     public function store(Request $request)
@@ -55,12 +55,12 @@ class CustomerController extends Controller
 
     public function show(Customer $customer)
     {
-        return view('pages.admin.customer.show', compact('customer'));
+        return view('pages.admin_baru.customer.show', compact('customer'));
     }
 
     public function edit(Customer $customer)
     {
-        return view('pages.admin.customer.edit', compact('customer'));
+        return view('pages.admin_baru.customer.edit', compact('customer'));
     }
 
     public function update(Request $request, Customer $customer)
@@ -91,7 +91,7 @@ class CustomerController extends Controller
     public function editPassword($id)
     {
         $customer = Customer::findOrFail($id);
-        return view('pages.admin.customer.change-password', compact('customer'));
+        return view('pages.admin_baru.customer.change-password', compact('customer'));
     }
 
     public function updatePassword(Request $request, $id)

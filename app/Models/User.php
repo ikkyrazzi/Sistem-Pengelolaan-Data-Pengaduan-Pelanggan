@@ -61,4 +61,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Complaint::class);
     }
+
+    public function customerDetail()
+    {
+        return $this->hasOne(Customer::class, 'user_id');
+    }
 }
