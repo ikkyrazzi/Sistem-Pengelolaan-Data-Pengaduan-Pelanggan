@@ -26,7 +26,7 @@ class DashboardController extends Controller
 
         $recentComplaints = Complaint::with('customer.customerDetail')->latest()->take(5)->get();
 
-        $categories = ['Gangguan Jaringan', 'Perangkat Rusak', 'Administrasi', 'Layanan TV', 'Gangguan Telepon', 'Lainnya'];
+        $categories = ['Gangguan Internet', 'Administrasi'];
         $complaintsByCategory = [];
 
         foreach ($categories as $category) {

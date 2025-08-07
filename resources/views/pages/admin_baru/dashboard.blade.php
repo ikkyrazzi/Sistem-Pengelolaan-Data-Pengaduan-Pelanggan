@@ -148,12 +148,8 @@
             var ctx = document.getElementById('categoryChart').getContext('2d');
 
             var categoryColors = {
-                'Gangguan Jaringan': '#ff6384',
-                'Perangkat Rusak': '#36a2eb',
-                'Administrasi': '#ffcd56',
-                'Layanan TV': '#4bc0c0',
-                'Gangguan Telepon': '#9966ff',
-                'Lainnya': '#ff9f40'
+                'Gangguan Internet': '#36a2eb',
+                'Administrasi': '#ffcd56'
             };
 
             var categoryChart = new Chart(ctx, {
