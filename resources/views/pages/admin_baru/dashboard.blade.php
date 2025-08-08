@@ -93,15 +93,15 @@
             </div>
         </div>
 
-        <!-- [ Main Content ] start -->
+        <!-- [ Charts + Recent ] -->
         <div class="row">
             <div class="col-md-8">
-                <div class="card">
+                <div class="card" style="height: 420px;"> <!-- NEW: fixed height for better render -->
                     <div class="card-header">
-                        <h5>Complaints by Category (Monthly)</h5>
+                        <h5>Complaints by Category (Monthly) • {{ $currentYear }}</h5>
                     </div>
                     <div class="card-body">
-                        <canvas id="categoryChart"></canvas>
+                        <canvas id="categoryChart" style="height: 320px;"></canvas> <!-- NEW: canvas height -->
                     </div>
                 </div>
             </div>
@@ -120,8 +120,8 @@
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <div>
                                             <strong>{{ $complaint->subject }}</strong><br>
-                                            <small class="text-muted">by
-                                                {{ $complaint->customer->name ?? 'Unknown' }} -
+                                            <small class="text-muted">
+                                                by {{ $complaint->customer->name ?? 'Unknown' }} -
                                                 {{ $complaint->customer->customerDetail->no_customer ?? 'Unknown' }}
                                             </small><br>
                                             <small class="text-muted">{{ $complaint->created_at->format('d M Y') }}</small>
@@ -145,33 +145,57 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            var ctx = document.getElementById('categoryChart').getContext('2d');
+            const ctx = document.getElementById('categoryChart').getContext('2d');
 
-            var categoryColors = {
+            // Tambahkan warna untuk Perangkat Rusak + fallback jika ada kategori baru lagi
+            const categoryColors = {
                 'Gangguan Internet': '#36a2eb',
-                'Administrasi': '#ffcd56'
+                'Administrasi': '#ffcd56',
+                'Perangkat Rusak': '#ff6384', // NEW
             };
+            const fallbackColors = ['#4bc0c0', '#9966ff', '#c9cbcf', '#8dd17e', '#e17cfd', '#ffa600'];
 
-            var categoryChart = new Chart(ctx, {
+            const datasets = [];
+            let colorIdx = 0;
+
+            @foreach ($complaintsByCategory as $categoryData)
+                (function() {
+                    const label = @json($categoryData['category']);
+                    const data = @json($categoryData['data']);
+                    const color = categoryColors[label] || fallbackColors[colorIdx++ % fallbackColors
+                        .length]; // NEW: fallback
+
+                    datasets.push({
+                        label: label,
+                        data: data,
+                        borderColor: color,
+                        backgroundColor: 'rgba(0,0,0,0)',
+                        pointBorderColor: color,
+                        pointBackgroundColor: color,
+                        borderWidth: 2,
+                        tension: 0.3
+                    });
+                })();
+            @endforeach
+
+            new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: {!! json_encode(range(1, 12)) !!}, // Bulan 1-12
-                    datasets: [
-                        @foreach ($complaintsByCategory as $categoryData)
-                            {
-                                label: '{{ $categoryData['category'] }}',
-                                data: {!! json_encode($categoryData['data']) !!},
-                                borderColor: categoryColors['{{ $categoryData['category'] }}'],
-                                backgroundColor: 'rgba(0,0,0,0)',
-                                borderWidth: 2,
-                                tension: 0.3
-                            },
-                        @endforeach
-                    ]
+                    labels: @json(range(1, 12)), // Bulan 1-12
+                    datasets: datasets
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
                     scales: {
                         x: {
                             title: {
@@ -184,7 +208,10 @@
                             title: {
                                 display: true,
                                 text: 'Jumlah Complaints'
-                            }
+                            },
+                            ticks: {
+                                precision: 0
+                            } // bilangan bulat
                         }
                     }
                 }
